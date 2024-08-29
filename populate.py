@@ -187,6 +187,15 @@ def populate_compras(cursor):
         (id_compras, id_cliente, id_cliente),
     )
     cursor.execute(
+        """UPDATE bd_hardware.produtos
+                SET quantidade_estoque = quantidade_estoque - ic.quantidade
+                FROM itens_carrinho AS ic
+                WHERE produtos.id_produtos = ic.id_produtos
+                AND ic.id_cliente = %s
+        """,
+        (id_cliente,),
+    )
+    cursor.execute(
         """DELETE FROM itens_carrinho 
         WHERE id_cliente = %s 
         """,
