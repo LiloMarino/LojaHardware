@@ -60,7 +60,6 @@ CREATE TABLE
     nome VARCHAR(100) NOT NULL,
     preco NUMERIC(10, 2) NOT NULL CHECK (preco >= 0),
     quantidade_estoque INT NOT NULL CHECK (quantidade_estoque >= 0),
-    modelo VARCHAR(100),
     descricao TEXT,
     id_subcategoria INT NOT NULL,
     id_fabricante INT NOT NULL,
