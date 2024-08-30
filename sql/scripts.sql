@@ -18,7 +18,7 @@ VALUES
 
 -- READ --
 SELECT
-  *
+  *´´
 FROM
   cliente;
 
@@ -306,9 +306,11 @@ FROM
 
 -- READ ITENS --
 SELECT
+  c.id_compras,
   cl.nome AS nome_cliente,
   c.data_compra,
   c.valor_total,
+  sub.nome AS nome_categoria,
   p.nome AS nome_produto,
   ic.quantidade,
   ic.preco_unitario,
@@ -318,5 +320,14 @@ FROM
   INNER JOIN itens_compra ic ON c.id_compras = ic.id_compras
   INNER JOIN cliente cl ON c.id_cliente = cl.id_cliente
   INNER JOIN produtos p ON ic.id_produtos = p.id_produtos
+  INNER JOIN subcategoria sub ON p.id_subcategoria = sub.id_subcategoria
 WHERE
   cl.nome = 'Murilo';
+
+UPDATE compras
+SET
+  valor_total = 500.00 WHERE id_compras = 2;
+
+UPDATE produtos
+  SET
+    descricao = NULL WHERE nome = 'GTX 1080'

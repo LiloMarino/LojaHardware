@@ -107,3 +107,34 @@ CREATE TABLE
     CONSTRAINT fk_itens_compra_compras FOREIGN KEY (id_compras, id_cliente) REFERENCES bd_hardware.compras (id_compras, id_cliente) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_itens_compra_produtos FOREIGN KEY (id_produtos) REFERENCES bd_hardware.produtos (id_produtos) ON DELETE NO ACTION ON UPDATE NO ACTION
   );
+
+-- --------------------------------------------------------------------
+-- Função para verificar se o valor total corresponde à soma dos itens
+-- --------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION verificar_valor_total()
+RETURNS TRIGGER AS $$
+DECLARE
+    soma_itens NUMERIC(10, 2);
+BEGIN
+    -- Calcula a soma dos itens da compra
+    SELECT SUM(preco_unitario * quantidade)
+    INTO soma_itens
+    FROM bd_hardware.itens_compra
+    WHERE id_compras = NEW.id_compras AND id_cliente = NEW.id_cliente;
+
+    -- Verifica se a soma dos itens corresponde ao valor total
+    IF soma_itens IS DISTINCT FROM NEW.valor_total THEN
+        RAISE EXCEPTION 'O valor total informado (%.2f) não corresponde à soma dos itens (%.2f)', NEW.valor_total, soma_itens;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- -----------------------------------------------------------------------------
+-- Trigger para verificar o valor total antes de inserir ou atualizar uma compra
+-- -----------------------------------------------------------------------------
+CREATE TRIGGER trigger_verificar_valor_total
+BEFORE INSERT OR UPDATE ON bd_hardware.compras
+FOR EACH ROW
+EXECUTE FUNCTION verificar_valor_total();
