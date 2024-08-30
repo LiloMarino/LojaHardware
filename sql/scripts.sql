@@ -265,6 +265,7 @@ DO $$
 DECLARE
   compras_id INTEGER;
 BEGIN
+  -- Insere uma nova compra
   INSERT INTO compras (id_cliente, data_compra, valor_total)
   VALUES (
     (SELECT id_cliente FROM cliente WHERE nome = 'Murilo'),
@@ -279,6 +280,7 @@ BEGIN
   )
   RETURNING id_compras INTO compras_id;
 
+  -- Insere os itens na tabela itens_compra
   INSERT INTO itens_compra (id_compras, id_cliente, id_produtos, quantidade, preco_unitario)
   SELECT 
     compras_id,
@@ -290,6 +292,14 @@ BEGIN
   INNER JOIN produtos AS p ON ic.id_produtos = p.id_produtos
   WHERE ic.id_cliente = (SELECT id_cliente FROM cliente WHERE nome = 'Murilo');
 
+  -- Atualiza a quantidade de estoque dos produtos
+  UPDATE produtos
+  SET quantidade_estoque = quantidade_estoque - ic.quantidade
+  FROM itens_carrinho AS ic
+  WHERE produtos.id_produtos = ic.id_produtos
+  AND ic.id_cliente = (SELECT id_cliente FROM cliente WHERE nome = 'Murilo');
+
+  -- Remove os itens do carrinho
   DELETE FROM itens_carrinho
   WHERE id_cliente = (SELECT id_cliente FROM cliente WHERE nome = 'Murilo');
 END $$;
@@ -302,7 +312,6 @@ SELECT
 FROM
   compras AS c
   INNER JOIN cliente AS cl ON cl.id_cliente = c.id_cliente;
-
 
 -- READ ITENS --
 SELECT
