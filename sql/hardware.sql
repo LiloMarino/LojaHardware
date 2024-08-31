@@ -147,3 +147,31 @@ AFTER INSERT OR UPDATE ON compras
 DEFERRABLE INITIALLY DEFERRED
 FOR EACH ROW
 EXECUTE FUNCTION verificar_valor_total();
+
+-- --------------------------------------------------------------------------------------
+-- Trigger para atualizar o valor total depois de inserir, atualizar e remover uma compra
+-- --------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION atualizar_valor_total_compra() 
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Recalcular o valor total da compra ao inserir, atualizar ou deletar um item
+  UPDATE bd_hardware.compras
+  SET valor_total = (
+    SELECT SUM(quantidade * preco_unitario)
+    FROM bd_hardware.itens_compra
+    WHERE id_compras = NEW.id_compras AND id_cliente = NEW.id_cliente
+  )
+  WHERE id_compras = NEW.id_compras AND id_cliente = NEW.id_cliente;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- -------------------------------------------------------------------------------------
+-- Criar o trigger que será executado ao inserir, atualizar ou remover um item da compra
+-- -------------------------------------------------------------------------------------
+CREATE CONSTRAINT TRIGGER trigger_atualizar_valor_total
+AFTER INSERT OR UPDATE OR DELETE ON itens_compra
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW
+EXECUTE FUNCTION atualizar_valor_total_compra();

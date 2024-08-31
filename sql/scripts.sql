@@ -318,26 +318,39 @@ SELECT
   c.id_compras,
   ic.id_cliente,
   cl.nome AS nome_cliente,
-  cl.cpf,
   c.data_compra,
-  c.valor_total,
-  sub.nome AS nome_categoria,
   p.nome AS nome_produto,
   ic.quantidade,
   ic.preco_unitario,
-  (ic.quantidade * ic.preco_unitario) AS valor_item
+  (ic.quantidade * ic.preco_unitario) AS valor_item,
+  c.valor_total
 FROM
   compras AS c
   INNER JOIN itens_compra ic ON c.id_compras = ic.id_compras
   INNER JOIN cliente cl ON c.id_cliente = cl.id_cliente
   INNER JOIN produtos p ON ic.id_produtos = p.id_produtos
-  INNER JOIN subcategoria sub ON p.id_subcategoria = sub.id_subcategoria
+WHERE
+  cl.nome = 'Murilo';
+
+SELECT
+  c.id_cliente,
+  cl.nome AS nome_cliente,
+  c.data_compra,
+  p.nome AS nome_produto,
+  ic.quantidade,
+  ic.preco_unitario,
+  c.valor_total
+FROM
+  compras AS c
+  INNER JOIN itens_compra ic ON c.id_compras = ic.id_compras
+  INNER JOIN cliente cl ON c.id_cliente = cl.id_cliente
+  INNER JOIN produtos p ON ic.id_produtos = p.id_produtos
 WHERE
   cl.nome = 'Murilo';
 
 UPDATE compras
 SET
-  valor_total = 500.00 WHERE id_compras = 2;
+  valor_total = 500.00 WHERE id_cliente = 283;
 
 UPDATE cliente
 SET
@@ -349,8 +362,8 @@ SET
 
 UPDATE compras
 SET
-  data_compra = '2024-08-29' WHERE id_compras = 2;
+  data_compra = '2024-09-29' WHERE id_compras = 283;
 
 UPDATE itens_compra
 SET
-  preco_unitario = 19999.99 WHERE id_compras = 2;
+  preco_unitario = 15000.00 WHERE id_compras = 283;
