@@ -58,7 +58,7 @@ CREATE TABLE
   IF NOT EXISTS bd_hardware.produtos (
     id_produtos SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    preco NUMERIC(10, 2) NOT NULL CHECK (preco >= 0),
+    preco NUMERIC(10, 2) NOT NULL CHECK (preco > 0),
     quantidade_estoque INT NOT NULL CHECK (quantidade_estoque >= 0),
     descricao TEXT,
     id_subcategoria INT NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE
     id_compras SERIAL,
     id_cliente INT NOT NULL,
     data_compra DATE NOT NULL,
-    valor_total NUMERIC(10, 2) NOT NULL CHECK (valor_total >= 0),
+    valor_total NUMERIC(10, 2) NOT NULL CHECK (valor_total > 0),
     PRIMARY KEY (id_compras, id_cliente),
     CONSTRAINT fk_compras_cliente FOREIGN KEY (id_cliente) REFERENCES bd_hardware.cliente (id_cliente) ON DELETE NO ACTION ON UPDATE NO ACTION
   );
@@ -101,8 +101,8 @@ CREATE TABLE
     id_compras INT NOT NULL,
     id_cliente INT NOT NULL,
     id_produtos INT NOT NULL,
-    quantidade INT NOT NULL CHECK (quantidade >= 0),
-    preco_unitario NUMERIC(10, 2) NOT NULL CHECK (preco_unitario >= 0),
+    quantidade INT NOT NULL CHECK (quantidade > 0),
+    preco_unitario NUMERIC(10, 2) NOT NULL CHECK (preco_unitario > 0),
     PRIMARY KEY (id_compras, id_produtos, id_cliente),
     CONSTRAINT fk_itens_compra_compras FOREIGN KEY (id_compras, id_cliente) REFERENCES bd_hardware.compras (id_compras, id_cliente) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_itens_compra_produtos FOREIGN KEY (id_produtos) REFERENCES bd_hardware.produtos (id_produtos) ON DELETE NO ACTION ON UPDATE NO ACTION
