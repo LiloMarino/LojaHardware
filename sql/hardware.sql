@@ -142,7 +142,8 @@ $$ LANGUAGE plpgsql;
 -- -----------------------------------------------------------------------------
 -- Trigger para verificar o valor total antes de inserir ou atualizar uma compra
 -- -----------------------------------------------------------------------------
-CREATE TRIGGER trigger_verificar_valor_total
-BEFORE INSERT OR UPDATE ON bd_hardware.compras
+CREATE CONSTRAINT TRIGGER trigger_verificar_valor_total
+AFTER INSERT OR UPDATE ON compras
+DEFERRABLE INITIALLY DEFERRED
 FOR EACH ROW
 EXECUTE FUNCTION verificar_valor_total();
