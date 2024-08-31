@@ -20,7 +20,9 @@ CREATE TABLE
     -- Validação de CPF: Verifica se tem 11 dígitos numéricos
     CONSTRAINT chk_cpf_valido CHECK (cpf ~ '^[0-9]{11}$'),
     -- Validação de e-mail: Formato de e-mail válido com case-insensitive
-    CONSTRAINT chk_email_valido CHECK (email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$')
+    CONSTRAINT chk_email_valido CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,63}$'),
+    -- Verificação de senha: Pelo menos 8 caracteres
+    CONSTRAINT chk_senha_valida CHECK (LENGTH(senha) >= 8)
   );
 
 -- -----------------------------------------------------
@@ -94,6 +96,8 @@ CREATE TABLE
     data_compra DATE NOT NULL,
     valor_total NUMERIC(10, 2) NOT NULL CHECK (valor_total > 0),
     PRIMARY KEY (id_compras, id_cliente),
+    -- Verificação: A data da compra não pode ser no futuro
+    CONSTRAINT chk_data_compra_valida CHECK (data_compra <= CURRENT_DATE),
     CONSTRAINT fk_compras_cliente FOREIGN KEY (id_cliente) REFERENCES bd_hardware.cliente (id_cliente) ON DELETE NO ACTION ON UPDATE NO ACTION
   );
 

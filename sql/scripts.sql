@@ -18,7 +18,7 @@ VALUES
 
 -- READ --
 SELECT
-  *´´
+  *
 FROM
   cliente;
 
@@ -342,3 +342,15 @@ SET
 UPDATE cliente
 SET
   email = 'email_invalido@dominio' WHERE nome = 'Murilo';
+
+UPDATE cliente
+SET
+  senha = 'senha' WHERE nome = 'Murilo';
+
+UPDATE compras
+SET
+  data_compra = '2024-08-29' WHERE id_compras = 2;
+
+UPDATE itens_compra
+SET
+  preco_unitario = 19999.99 WHERE id_compras = 2;
