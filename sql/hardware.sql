@@ -16,7 +16,11 @@ CREATE TABLE
     email VARCHAR(100) NOT NULL,
     senha VARCHAR(255) NOT NULL,
     CONSTRAINT uk_email UNIQUE (email),
-    CONSTRAINT uk_cpf UNIQUE (cpf)
+    CONSTRAINT uk_cpf UNIQUE (cpf),
+    -- Validação de CPF: Verifica se tem 11 dígitos numéricos
+    CONSTRAINT chk_cpf_valido CHECK (cpf ~ '^[0-9]{11}$'),
+    -- Validação de e-mail: Formato de e-mail válido com case-insensitive
+    CONSTRAINT chk_email_valido CHECK (email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$')
   );
 
 -- -----------------------------------------------------

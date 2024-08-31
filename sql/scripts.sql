@@ -316,7 +316,9 @@ FROM
 -- READ ITENS --
 SELECT
   c.id_compras,
+  ic.id_cliente,
   cl.nome AS nome_cliente,
+  cl.cpf,
   c.data_compra,
   c.valor_total,
   sub.nome AS nome_categoria,
@@ -337,6 +339,6 @@ UPDATE compras
 SET
   valor_total = 500.00 WHERE id_compras = 2;
 
-UPDATE produtos
-  SET
-    descricao = NULL WHERE nome = 'GTX 1080'
+UPDATE cliente
+SET
+  email = 'email_invalido@dominio' WHERE nome = 'Murilo';
