@@ -23,13 +23,12 @@ public class FabricanteRepository implements CrudRepository<Fabricante> {
     @Override
     public Fabricante findById(int id) {
         String sql = "SELECT id_fabricante, nome FROM fabricante WHERE id_fabricante = ?";
-        List<Fabricante> fabricantes = jdbcTemplate.query(sql, (rs, rowNum) -> {
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             Fabricante fabricante = new Fabricante();
             fabricante.setIdFabricante(rs.getInt("id_fabricante"));
             fabricante.setNome(rs.getString("nome"));
             return fabricante;
         }, id);
-        return fabricantes.isEmpty() ? null : fabricantes.get(0);
     }
 
     @Override

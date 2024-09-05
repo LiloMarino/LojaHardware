@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.loja.hardware.model.Fabricante;
+import project.loja.hardware.model.Produto;
 import project.loja.hardware.service.FabricanteService;
+import project.loja.hardware.service.ProdutoService;
 
 @RestController
 @RequestMapping("/fabricantes")
@@ -23,6 +25,9 @@ public class FabricanteController implements CrudController<Fabricante> {
 
     @Autowired
     private FabricanteService fabricanteService;
+
+    @Autowired
+    private ProdutoService produtoService;
 
     @PostMapping
     public ResponseEntity<String> create(@RequestBody Fabricante fabricante) {
@@ -36,10 +41,16 @@ public class FabricanteController implements CrudController<Fabricante> {
         return new ResponseEntity<>(fabricante, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/produtos")
+    public ResponseEntity<List<Produto>> getProdutos(@PathVariable int id) {
+        List<Produto> produtos = produtoService.getFabricanteById(id);
+        return new ResponseEntity<>(produtos, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<Fabricante>> getAll() {
-        List<Fabricante> Fabricantes = fabricanteService.listarFabricantes();
-        return new ResponseEntity<>(Fabricantes, HttpStatus.OK);
+        List<Fabricante> fabricantes = fabricanteService.listarFabricantes();
+        return new ResponseEntity<>(fabricantes, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

@@ -23,13 +23,12 @@ public class CategoriaRepository implements CrudRepository<Categoria> {
     @Override
     public Categoria findById(int id) {
         String sql = "SELECT id_categoria, nome FROM categoria WHERE id_categoria = ?";
-        List<Categoria> categorias = jdbcTemplate.query(sql, (rs, rowNum) -> {
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             Categoria categoria = new Categoria();
             categoria.setIdCategoria(rs.getInt("id_categoria"));
             categoria.setNome(rs.getString("nome"));
             return categoria;
         }, id);
-        return categorias.isEmpty() ? null : categorias.get(0);
     }
 
     @Override
