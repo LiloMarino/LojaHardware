@@ -23,14 +23,13 @@ public class SubcategoriaRepository implements CrudRepository<Subcategoria> {
     @Override
     public Subcategoria findById(int id) {
         String sql = "SELECT id_subcategoria, nome, id_categoria FROM subcategoria WHERE id_subcategoria = ?";
-        List<Subcategoria> subcategorias = jdbcTemplate.query(sql, (rs, rowNum) -> {
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             Subcategoria subcategoria = new Subcategoria();
             subcategoria.setIdSubcategoria(rs.getInt("id_subcategoria"));
             subcategoria.setNome(rs.getString("nome"));
             subcategoria.setIdCategoria(rs.getInt("id_categoria"));
             return subcategoria;
         }, id);
-        return subcategorias.isEmpty() ? null : subcategorias.get(0);
     }
 
     @Override
