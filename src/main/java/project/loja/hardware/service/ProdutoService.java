@@ -22,6 +22,10 @@ public class ProdutoService {
         return produtoRepository.findById(id);
     }
 
+    public List<Produto> getFabricanteById(int id) {
+        return produtoRepository.findByIdFabricante(id);
+    }
+
     public List<Produto> listarProdutos() {
         return produtoRepository.findAll();
     }
