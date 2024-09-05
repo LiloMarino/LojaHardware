@@ -42,7 +42,7 @@ public class ItemCarrinhoRepository {
         }, idCliente, idProduto);
     }
 
-    public int update(ItemCarrinho itemCarrinho) {
+    public int update(int idCliente, int idProduto, ItemCarrinho itemCarrinho) {
         String sql = "UPDATE itens_carrinho SET quantidade = ? WHERE id_cliente = ? AND id_produtos = ?";
         return jdbcTemplate.update(sql, itemCarrinho.getQuantidade(), itemCarrinho.getIdCliente(),
                 itemCarrinho.getIdProduto());
@@ -53,9 +53,9 @@ public class ItemCarrinhoRepository {
         return jdbcTemplate.update(sql, id);
     }
 
-    public int deleteByIdClienteAndIdProduto(int id) {
+    public int deleteByIdClienteAndIdProduto(int idCliente, int idProduto) {
         String sql = "DELETE FROM itens_carrinho WHERE id_cliente = ? AND id_produtos = ?";
-        return jdbcTemplate.update(sql, id);
+        return jdbcTemplate.update(sql, idCliente, idProduto);
     }
 
 }
