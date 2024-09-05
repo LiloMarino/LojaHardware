@@ -13,27 +13,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import project.loja.hardware.model.ItensCarrinho;
-import project.loja.hardware.service.CarrinhoService;
+import project.loja.hardware.model.ItemCarrinho;
+import project.loja.hardware.service.ItemCarrinhoService;
 
 @RestController
 @RequestMapping("/carrinho")
 public class CarrinhoController {
 
     @Autowired
-    private CarrinhoService carrinhoService;
+    private ItemCarrinhoService carrinhoService;
 
     // Adiciona um item ao carrinho
     @PostMapping("/adicionar")
-    public ResponseEntity<String> adicionarItem(@RequestBody ItensCarrinho itemCarrinho) {
+    public ResponseEntity<String> adicionarItem(@RequestBody ItemCarrinho itemCarrinho) {
         carrinhoService.adicionarItem(itemCarrinho);
         return new ResponseEntity<>("Item adicionado ao carrinho com sucesso!", HttpStatus.CREATED);
     }
 
     // Exibe os itens no carrinho de um cliente
     @GetMapping("/{idCliente}")
-    public ResponseEntity<List<ItensCarrinho>> verItensCarrinho(@PathVariable int idCliente) {
-        List<ItensCarrinho> itens = carrinhoService.verItensCarrinho(idCliente);
+    public ResponseEntity<List<ItemCarrinho>> verItensCarrinho(@PathVariable int idCliente) {
+        List<ItemCarrinho> itens = carrinhoService.verItemCarrinho(idCliente);
         return new ResponseEntity<>(itens, HttpStatus.OK);
     }
 
