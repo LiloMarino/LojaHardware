@@ -26,8 +26,8 @@ public class FabricanteService {
         return fabricanteRepository.findAll();
     }
 
-    public void atualizarFabricante(Fabricante fabricanteAtualizado) {
-        fabricanteRepository.update(fabricanteAtualizado);
+    public void atualizarFabricante(int id, Fabricante fabricanteAtualizado) {
+        fabricanteRepository.update(id, fabricanteAtualizado);
     }
 
     public void deletarFabricante(int id) {

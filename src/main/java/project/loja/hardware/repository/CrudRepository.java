@@ -33,7 +33,7 @@ public interface CrudRepository<T> {
      * @param entity a entidade a ser atualizada
      * @return o ID da entidade atualizada
      */
-    int update(T entity);
+    int update(int id,T entity);
 
     /**
      * Deleta uma entidade pelo seu ID.

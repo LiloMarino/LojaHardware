@@ -44,9 +44,9 @@ public class FabricanteRepository implements CrudRepository<Fabricante> {
     }
 
     @Override
-    public int update(Fabricante fabricante) {
+    public int update(int id, Fabricante fabricante) {
         String sql = "UPDATE fabricante SET nome = ? WHERE id_fabricante = ?";
-        return jdbcTemplate.update(sql, fabricante.getNome(), fabricante.getIdFabricante());
+        return jdbcTemplate.update(sql, fabricante.getNome(), id);
     }
 
     @Override
