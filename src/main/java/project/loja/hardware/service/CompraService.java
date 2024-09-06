@@ -23,8 +23,11 @@ public class CompraService {
     private CompraRepository compraRepository;
 
     @Transactional
-    public void realizarCompra(Compra compra) {
-        compraRepository.save(compra);
+    public int realizarCompra(int idCliente) {
+        Compra compra = new Compra();
+        compra.setIdCliente(idCliente);
+        compra.setDataCompra(Date.from(Instant.now()));
+        return compraRepository.save(compra);
     }
 
     public Compra getCompraById(int idCompra) {

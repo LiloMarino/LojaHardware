@@ -17,7 +17,7 @@ public class CompraRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Transactional
-    public void save(Compra compra) {
+    public int save(Compra compra) {
         // Insere uma nova compra
         String insertCompraSql = "INSERT INTO compras (id_cliente, data_compra, valor_total) " +
                 "VALUES (?, ?, (SELECT SUM(ic.quantidade * p.preco) FROM itens_carrinho AS ic " +
@@ -45,6 +45,7 @@ public class CompraRepository {
         // Remove os itens do carrinho
         String deleteItensCarrinhoSql = "DELETE FROM itens_carrinho WHERE id_cliente = ?";
         jdbcTemplate.update(deleteItensCarrinhoSql, compra.getIdCliente());
+        return idCompra;
     }
 
     public Compra findByIdCompra(int idCompra) {
