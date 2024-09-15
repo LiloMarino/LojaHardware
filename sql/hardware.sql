@@ -44,7 +44,7 @@ CREATE TABLE
     nome VARCHAR(45) NOT NULL,
     id_categoria INT NOT NULL,
     CONSTRAINT uk_subcategoria UNIQUE (nome),
-    CONSTRAINT fk_subcategoria_categoria FOREIGN KEY (id_categoria) REFERENCES bd_hardware.categoria (id_categoria) ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT fk_subcategoria_categoria FOREIGN KEY (id_categoria) REFERENCES bd_hardware.categoria (id_categoria) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
 -- -----------------------------------------------------
@@ -69,8 +69,8 @@ CREATE TABLE
     descricao TEXT,
     id_subcategoria INT NOT NULL,
     id_fabricante INT NOT NULL,
-    CONSTRAINT fk_produtos_subcategoria FOREIGN KEY (id_subcategoria) REFERENCES bd_hardware.subcategoria (id_subcategoria) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT fk_produtos_fabricante FOREIGN KEY (id_fabricante) REFERENCES bd_hardware.fabricante (id_fabricante) ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT fk_produtos_subcategoria FOREIGN KEY (id_subcategoria) REFERENCES bd_hardware.subcategoria (id_subcategoria) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_produtos_fabricante FOREIGN KEY (id_fabricante) REFERENCES bd_hardware.fabricante (id_fabricante) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
 -- -----------------------------------------------------
@@ -82,7 +82,7 @@ CREATE TABLE
     id_produtos INT NOT NULL,
     quantidade INT NOT NULL CHECK (quantidade >= 0),
     PRIMARY KEY (id_cliente, id_produtos),
-    CONSTRAINT fk_itens_carrinho_cliente FOREIGN KEY (id_cliente) REFERENCES bd_hardware.cliente (id_cliente) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fk_itens_carrinho_cliente FOREIGN KEY (id_cliente) REFERENCES bd_hardware.cliente (id_cliente) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_itens_carrinho_produtos FOREIGN KEY (id_produtos) REFERENCES bd_hardware.produtos (id_produtos) ON DELETE NO ACTION ON UPDATE NO ACTION
   );
 
@@ -98,7 +98,7 @@ CREATE TABLE
     PRIMARY KEY (id_compras, id_cliente),
     -- Verificação: A data da compra não pode ser no futuro
     CONSTRAINT chk_data_compra_valida CHECK (data_compra <= CURRENT_DATE),
-    CONSTRAINT fk_compras_cliente FOREIGN KEY (id_cliente) REFERENCES bd_hardware.cliente (id_cliente) ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT fk_compras_cliente FOREIGN KEY (id_cliente) REFERENCES bd_hardware.cliente (id_cliente) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
 -- -----------------------------------------------------
@@ -112,7 +112,7 @@ CREATE TABLE
     quantidade INT NOT NULL CHECK (quantidade > 0),
     preco_unitario NUMERIC(10, 2) NOT NULL CHECK (preco_unitario > 0),
     PRIMARY KEY (id_compras, id_produtos, id_cliente),
-    CONSTRAINT fk_itens_compra_compras FOREIGN KEY (id_compras, id_cliente) REFERENCES bd_hardware.compras (id_compras, id_cliente) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fk_itens_compra_compras FOREIGN KEY (id_compras, id_cliente) REFERENCES bd_hardware.compras (id_compras, id_cliente) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_itens_compra_produtos FOREIGN KEY (id_produtos) REFERENCES bd_hardware.produtos (id_produtos) ON DELETE NO ACTION ON UPDATE NO ACTION
   );
 
