@@ -58,7 +58,7 @@ public class RelatorioRepository {
     }
 
     public List<Map<String, Object>> getLowStockProdutos() {
-        String sql = "SELECT p.nome AS produto, p.quantidade_estoque AS estoque_atual" +
+        String sql = "SELECT p.nome AS produto, p.quantidade_estoque AS estoque_atual " +
                 "FROM produtos p " +
                 "WHERE p.quantidade_estoque < 10 " +
                 "ORDER BY p.quantidade_estoque ASC ";
@@ -77,7 +77,7 @@ public class RelatorioRepository {
                 "FROM compra_comum cc " +
                 "INNER JOIN produtos p1 ON cc.produto1 = p1.id_produtos " +
                 "INNER JOIN produtos p2 ON cc.produto2 = p2.id_produtos " +
-                "ORDER BY cc.vezes_compradas_juntas DESC " +
+                "ORDER BY cc.vezes_comprados_juntos DESC " +
                 "LIMIT 10 ";
         return jdbcTemplate.queryForList(sql);
     }
