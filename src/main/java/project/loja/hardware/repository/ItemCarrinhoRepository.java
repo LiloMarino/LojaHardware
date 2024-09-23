@@ -33,14 +33,16 @@ public class ItemCarrinhoRepository {
 
     public ItemCarrinho findByIdClienteAndIdProduto(int idCliente, int idProduto) {
         String sql = "SELECT id_cliente, id_produtos, quantidade FROM itens_carrinho WHERE id_cliente = ? AND id_produtos = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+        List<ItemCarrinho> resultados = jdbcTemplate.query(sql, (rs, rowNum) -> {
             ItemCarrinho itemCarrinho = new ItemCarrinho();
             itemCarrinho.setIdCliente(rs.getInt("id_cliente"));
             itemCarrinho.setIdProduto(rs.getInt("id_produtos"));
             itemCarrinho.setQuantidade(rs.getInt("quantidade"));
             return itemCarrinho;
         }, idCliente, idProduto);
-    }
+    
+        return resultados.isEmpty() ? null : resultados.get(0);
+    }    
 
     public int update(int idCliente, int idProduto, ItemCarrinho itemCarrinho) {
         String sql = "UPDATE itens_carrinho SET quantidade = ? WHERE id_cliente = ? AND id_produtos = ?";

@@ -81,7 +81,7 @@ public class CompraRepository {
             itemCompra.setPrecoUnitario(rs.getBigDecimal("preco_unitario"));
             itemCompra.setQuantidade(rs.getInt("quantidade"));
             return itemCompra;
-        });
+        }, compra.getIdCompra());
     }
 
     public int updateItensCompra(int idCompra, int idProduto, ItemCompra itemCompra) {
