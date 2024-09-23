@@ -56,9 +56,9 @@ public class ClienteController implements CrudController<Cliente> {
     }
 
     @GetMapping("/{idCliente}/compra/{idCompra}")
-    public ResponseEntity<List<ItemCompra>> verCompra(@PathVariable int idCliente, @PathVariable int idCompra) {
-        List<ItemCompra> itemCompras = compraService.listarItensCompra(idCompra);
-        return new ResponseEntity<>(itemCompras, HttpStatus.OK);
+    public ResponseEntity<String> verCompra(@PathVariable int idCliente, @PathVariable int idCompra) {
+        String notaFiscal = compraService.gerarNotaFiscal(idCompra);
+        return new ResponseEntity<>(notaFiscal, HttpStatus.OK);
     }
 
     @GetMapping
