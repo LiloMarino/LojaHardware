@@ -4,18 +4,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Relatórios</title>
     <style>
         body {
             background-color: #004a88;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .topbar {
+            background-color: #004a88;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .topbar img {
+            height: 100px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 colunas */
+            grid-gap: 20px;
+            padding: 20px;
+        }
+
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            max-width: 100%;
         }
     </style>
 </head>
 
 <body>
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+    <!-- Topbar com logo -->
+    <div class="topbar">
         <img src="/assets/img/logo.png" alt="Beraldi Informática">
     </div>
+
+    <!-- Container dos gráficos -->
+    <div class="grid-container">
+        <div class="chart-container">
+            <canvas id="chart1"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart2"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart3"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart4"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart5"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart6"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Script para fazer as requisições e gerar os gráficos -->
+    <script>
+        // Função para gerar cores aleatórias
+        function gerarCoresAleatorias(quantidade) {
+            const cores = [];
+            for (let i = 0; i < quantidade; i++) {
+                const r = Math.floor(Math.random() * 255);
+                const g = Math.floor(Math.random() * 255);
+                const b = Math.floor(Math.random() * 255);
+                cores.push(`rgba(${r}, ${g}, ${b}, 0.5)`);
+            }
+            return cores;
+        }
+
+        // Função para buscar dados da API e gerar gráficos
+        function gerarGrafico(apiUrl, canvasId, label, campoNome, campoValor, chartType = 'bar', labelConcat = null) {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Mapeia os dados conforme a estrutura esperada
+                    let labels;
+                    if (labelConcat) {
+                        // Se labelConcat for definido, concatena os campos para formar a label
+                        labels = data.map(item => item[labelConcat[0]] + ' + ' + item[labelConcat[1]]);
+                    } else {
+                        labels = data.map(item => item[campoNome]);
+                    }
+                    const values = data.map(item => item[campoValor]);
+
+                    // Gera cores variadas para as barras
+                    const cores = gerarCoresAleatorias(labels.length);
+
+                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    new Chart(ctx, {
+                        type: chartType,
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: label,
+                                data: values,
+                                backgroundColor: cores,
+                                borderColor: cores.map(cor => cor.replace('0.5', '1')),
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        }
+
+        // Gerar gráficos com dados da API
+        gerarGrafico('/relatorio/1', 'chart1', 'Top Produtos', 'produto', 'total_vendido');
+        gerarGrafico('/relatorio/2', 'chart2', 'Top Fabricantes', 'fabricante', 'total_vendido');
+        gerarGrafico('/relatorio/3', 'chart3', 'Top Categorias', 'categoria', 'total_vendido');
+        gerarGrafico('/relatorio/4', 'chart4', 'Vendas do Último Ano', 'mes', 'total_vendas', 'line');
+
+        // Alteração: Concatenação de produtos para o gráfico de combinações de produtos
+        gerarGrafico('/relatorio/5', 'chart5', 'Melhores Combinações de Produtos', 'produto', 'vezes_comprados_juntos', 'bar', ['produto', 'comprado_junto']);
+
+        // Gráfico de produtos com baixo estoque
+        gerarGrafico('/relatorio/6', 'chart6', 'Produtos com Baixo Estoque', 'produto', 'estoque_atual');
+
+    </script>
+
 </body>
 
 </html>
